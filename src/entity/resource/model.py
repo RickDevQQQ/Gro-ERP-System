@@ -35,4 +35,3 @@ class Resource(ColumnIdAutoIncrement, ColumnCreatedAt, ColumnIsDeleted, Model):
 
 class Unit(ColumnIdAutoIncrement, Model):
     name: Mapped[str] = mapped_column(String(128), doc="Наименование")
-
