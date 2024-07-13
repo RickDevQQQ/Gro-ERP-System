@@ -1,42 +1,36 @@
 from pydantic import BaseModel
-
-from src.core.field import (
-    FieldCreatedAt,
-)
 from src.entity.resource.field import (
+    FieldResourceId,
     FieldResourceName,
     FieldResourceDescription,
     FieldResourceDisplayName,
     FieldResourcePrice,
-
-    FieldResourceId,
     FieldUnitId,
     FieldUnitName
 )
 
 
-class CreateResourceDTO(BaseModel):
-    display_name: FieldResourceDisplayName
+class CreateResourceSchema(BaseModel):
     name: FieldResourceName
+    display_name: FieldResourceDisplayName
     description: FieldResourceDescription
     price: FieldResourcePrice
     unit_id: FieldUnitId
 
 
-class UpdateResourceDTO(CreateResourceDTO):
+class UpdateResourceSchema(CreateResourceSchema):
     id: FieldResourceId
 
 
-class UnitDTO(BaseModel):
+class ResponseUnitSchema(BaseModel):
     id: FieldUnitId
     name: FieldUnitName
 
 
-class ResourceDTO(BaseModel):
+class ResponseResourceSchema(BaseModel):
     id: FieldResourceId
-    display_name: FieldResourceDisplayName
     name: FieldResourceName
+    display_name: FieldResourceDisplayName
     description: FieldResourceDescription
     price: FieldResourcePrice
-    created_at: FieldCreatedAt
-    unit: UnitDTO
+    unit: ResponseUnitSchema

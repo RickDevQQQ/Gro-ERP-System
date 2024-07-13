@@ -7,10 +7,10 @@ from src.core.enum import SaveMethod
 from src.core.paginator import Paginator
 from src.core.repository import AbstractEntityRepository
 from src.core.type import FilterType
-from src.entity.resource.dto import CreateResourceDTO, ResourceDTO, UpdateResourceDTO
-from src.entity.resource.mapper import ResourceMapper
-from src.entity.resource.model import Resource
-from src.entity.resource.type import ResourceIdOneOrIterable, ResourceOneOrList, ResourceId
+from src.entity.resource.dto import CreateResourceDTO, ResourceDTO, UpdateResourceDTO, UnitDTO
+from src.entity.resource.mapper import ResourceMapper, UnitMapper
+from src.entity.resource.model import Resource, Unit
+from src.entity.resource.type import ResourceIdOneOrIterable, ResourceOneOrList, ResourceId, UnitId
 
 
 class AbstractResourceRepository(AbstractEntityRepository):
@@ -43,7 +43,8 @@ class ResourceRepository(AbstractResourceRepository):
         return await self.model.get_models(
             self.session,
             filters=[
-                self.model.id.in_(id_)
+                self.model.id.in_(id_),
+                self.model.is_deleted.is_(False)
             ],
             load_options=[
                 joinedload(self.model.unit)
@@ -55,6 +56,7 @@ class ResourceRepository(AbstractResourceRepository):
             self.session,
             filters=[
                 self.model.id == id_,
+                self.model.is_deleted.is_(False)
             ],
             load_options=[
                 joinedload(self.model.unit)
@@ -74,7 +76,7 @@ class ResourceRepository(AbstractResourceRepository):
         ]
 
     def _get_filters_from_paginator(self, paginator: Paginator) -> List[FilterType]:
-        filters = []
+        filters = [self.model.is_deleted.is_(False)]
         name = paginator.filters.get('name')
         display_name = paginator.filters.get('display_name')
         description = paginator.filters.get('description')
@@ -133,3 +135,37 @@ class ResourceRepository(AbstractResourceRepository):
             unit_id=dto.unit_id
         )
         await self.save(save)
+
+
+class AbstractUnitRepository(AbstractEntityRepository):
+    model = Unit
+
+    @abstractmethod
+    async def get_by_id(self, id_: UnitId) -> UnitDTO:
+        ...
+
+    @abstractmethod
+    async def get(self) -> List[UnitDTO]:
+        ...
+
+
+class UnitRepository(AbstractUnitRepository):
+
+    async def get_by_id(self, id_: UnitId) -> UnitDTO:
+        model = await self.model.get_models(
+            self.session,
+            filters=[
+                self.model.id == id_,
+            ],
+            first=True
+        )
+        return UnitMapper.from_model_to_dto(model)
+
+    async def get(self) -> List[UnitDTO]:
+        return [
+            UnitMapper.from_model_to_dto(model)
+            for model in await self.model.get_models(
+                self.session,
+                order_by=self.model.id.desc()
+            )
+        ]

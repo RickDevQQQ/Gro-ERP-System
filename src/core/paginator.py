@@ -1,8 +1,8 @@
 from math import ceil
-from typing import Optional, Dict
+from typing import Optional, Dict, Annotated, Tuple
 
 from src.core.validation import ValidationResult
-from fastapi import Query
+from fastapi import Query, Depends
 
 
 class Paginator:
@@ -39,3 +39,9 @@ def get_paginator_info(
     page: int = Query(default=1, title="Номер страницы")
 ):
     return limit, page
+
+
+PaginatorInfoAnnotated = Annotated[
+    Tuple[int, int],
+    Depends(get_paginator_info)
+]

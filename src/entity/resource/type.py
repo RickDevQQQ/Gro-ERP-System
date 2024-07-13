@@ -5,11 +5,13 @@ if TYPE_CHECKING:
 
 __all__ = (
     'ResourceId',
+    'UnitId',
     'ResourceOneOrList',
     'ResourceIdOneOrIterable'
 
 )
 ResourceId: TypeAlias = int
+UnitId: TypeAlias = int
 
 ResourceIdOneOrIterable: TypeAlias = Union[ResourceId, Iterable[ResourceId]]
 ResourceOneOrList: TypeAlias = Union[Optional['ResourceDTO'] | List['ResourceDTO']]

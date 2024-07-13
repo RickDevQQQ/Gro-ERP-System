@@ -1,5 +1,5 @@
 from src.entity.resource.dto import ResourceDTO, UnitDTO
-from src.entity.resource.model import Resource
+from src.entity.resource.model import Resource, Unit
 
 
 class ResourceMapper:
@@ -17,4 +17,14 @@ class ResourceMapper:
                 id=model.unit.id,
                 name=model.unit.name
             )
+        )
+
+
+class UnitMapper:
+
+    @staticmethod
+    def from_model_to_dto(model: Unit) -> UnitDTO:
+        return UnitDTO(
+            id=model.id,
+            name=model.name,
         )
