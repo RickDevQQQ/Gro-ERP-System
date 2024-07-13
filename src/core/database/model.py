@@ -5,6 +5,7 @@ from sqlalchemy.orm import DeclarativeBase, declared_attr
 from typing import Optional, List, Self, Dict, Union
 
 from src.config import config
+from src.core.type import FilterType
 
 async_engine = create_async_engine(
     url=config.default_asyncpg_url,
@@ -61,7 +62,7 @@ class Model(AsyncAttrs, DeclarativeBase):
     async def get_models(
         cls,
         session: AsyncSession,
-        filters: List[bool | BinaryExpression],
+        filters: List[FilterType],
         load_options: Optional[List] = None,
         joins: Optional[List] = None,
         order_by: Optional[ColumnElement] = None,
