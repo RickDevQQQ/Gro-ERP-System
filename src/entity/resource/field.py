@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import Annotated
 
 from pydantic import Field
@@ -14,7 +15,10 @@ __all__ = (
     'FieldResourceId',
     'FieldResourceName',
     'FieldResourceDisplayName',
-    'FieldResourceDescription'
+    'FieldResourceDescription',
+    'FieldResourcePrice',
+    'FieldUnitId',
+    'FieldUnitName'
 )
 
 FieldResourceId = Annotated[
@@ -45,5 +49,25 @@ FieldResourceDescription = Annotated[
     Field(
         title=RESOURCE_DESCRIPTION_DOC,
         max_length=RESOURCE_DESCRIPTION_MAX_LENGTH
+    )
+]
+FieldResourcePrice = Annotated[
+    Decimal,
+    Field(
+        title="Цена"
+    )
+]
+
+FieldUnitId = Annotated[
+    int,
+    Field(
+        title="ИД Единицы измерения",
+        ge=0
+    )
+]
+FieldUnitName = Annotated[
+    str,
+    Field(
+        title="Наименование"
     )
 ]

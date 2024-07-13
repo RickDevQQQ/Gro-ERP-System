@@ -7,7 +7,11 @@ from src.entity.resource.field import (
     FieldResourceName,
     FieldResourceDescription,
     FieldResourceDisplayName,
-    FieldResourceId
+    FieldResourcePrice,
+
+    FieldResourceId,
+    FieldUnitId,
+    FieldUnitName
 )
 
 
@@ -15,11 +19,23 @@ class CreateResourceDTO(BaseModel):
     display_name: FieldResourceDisplayName
     name: FieldResourceName
     description: FieldResourceDescription
+    price: FieldResourcePrice
+    unit_id: FieldUnitId
 
 
 class UpdateResourceDTO(CreateResourceDTO):
     id: FieldResourceId
 
 
-class ResourceDTO(UpdateResourceDTO):
+class UnitDTO(BaseModel):
+    id: FieldUnitId
+    name: FieldUnitName
+
+
+class ResourceDTO(BaseModel):
+    display_name: FieldResourceDisplayName
+    name: FieldResourceName
+    description: FieldResourceDescription
+    price: FieldResourcePrice
     created_at: FieldCreatedAt
+    unit: UnitDTO
