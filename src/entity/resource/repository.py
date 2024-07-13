@@ -63,6 +63,9 @@ class ResourceRepository(AbstractResourceRepository):
             for model in await self._get_by_ids(id_)
         ]
 
+    async def get(self) -> List[ResourceDTO]:
+        ...
+
     async def create(self, dto: CreateResourceDTO, *, save: SaveMethod = SaveMethod.none) -> ResourceDTO:
         model = Resource(
             display_name=dto.display_name,
