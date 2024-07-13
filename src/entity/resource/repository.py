@@ -25,7 +25,7 @@ class AbstractResourceRepository(AbstractEntityRepository):
         ...
 
     @abstractmethod
-    async def delete(self, id_: ResourceId) -> None:
+    async def delete(self, id_: ResourceId, *, save: SaveMethod = SaveMethod.none) -> None:
         ...
 
     @abstractmethod
