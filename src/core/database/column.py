@@ -21,7 +21,7 @@ class ColumnIsDeleted:
 
 
 class ColumnUpdatedAt:
-    created_at: Mapped[dt.datetime] = mapped_column(
+    updated_at: Mapped[dt.datetime] = mapped_column(
         server_default=text("TIMEZONE('utc', now())"),
         onupdate=dt.datetime.now(dt.UTC),
         doc="Время обновления"
@@ -29,7 +29,7 @@ class ColumnUpdatedAt:
 
 
 class ColumnCreatedAt:
-    updated_at: Mapped[dt.datetime] = mapped_column(
+    created_at: Mapped[dt.datetime] = mapped_column(
         server_default=text("TIMEZONE('utc', now())"),
         doc="Время создания"
     )

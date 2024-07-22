@@ -1,10 +1,11 @@
-from sqlalchemy import MetaData, select, ColumnElement
+from sqlalchemy import MetaData, select, ColumnElement, update, BinaryExpression
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine, AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, declared_attr
 
 from typing import Optional, List, Self, Dict, Union
 
 from src.config import config
+from src.core.type import FilterType
 
 async_engine = create_async_engine(
     url=config.default_asyncpg_url,
@@ -61,7 +62,7 @@ class Model(AsyncAttrs, DeclarativeBase):
     async def get_models(
         cls,
         session: AsyncSession,
-        filters: List[bool],
+        filters: List[FilterType],
         load_options: Optional[List] = None,
         joins: Optional[List] = None,
         order_by: Optional[ColumnElement] = None,
@@ -91,6 +92,23 @@ class Model(AsyncAttrs, DeclarativeBase):
         if first:
             return result.scalars().first()
         return list(result.scalars().all())
+
+    @classmethod
+    async def update(
+        cls,
+        session: AsyncSession,
+        filters: List[bool],
+        **kwargs
+    ):
+        query = (
+            update(cls)
+            .filter(*filters)
+            .values(**kwargs)
+            .execution_options(synchronize_session="fetch")
+        )
+        result = await session.execute(query)
+        print(result.scalars().all())
+
 
     @classmethod
     def from_dict(cls, data: Dict) -> Self:
