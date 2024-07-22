@@ -22,10 +22,7 @@ api_resource_router = APIRouter(
 def get_paginator_for_order(
     info: PaginatorInfoAnnotated
 ):
-    return Paginator(
-        limit=info[0],
-        page=info[1]
-    )
+    return Paginator(limit=info[0], page=info[1])
 
 
 @api_resource_router.post(
